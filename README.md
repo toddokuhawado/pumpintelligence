@@ -1,6 +1,6 @@
-# Jacob Uploads Chart Generators
+# Jacob Uploads Pre-Bonding Chart Generator
 
-Advanced stochastic crypto chart generation for research and simulation purposes.
+Advanced stochastic crypto chart generation focused on pre-bonding price discovery with organic market phases.
 
 ## 🎯 Features
 
@@ -53,11 +53,14 @@ python3 -m http.server 8000
 4. Click "Generate Chart"
 5. Export as JSON data or PNG image
 
-## 📊 Chart Types
+## 📊 Chart Generation
 
-- **Pre-Bonding**: Organic price formation leading to $100k bonding curve
-- **Full Chart**: Pre + post bonding simulation
-- **Post-Bonding**: Various scenarios (pump/dump, organic growth, etc.)
+**Pre-Bonding Charts**: Advanced stochastic price formation with organic market phases leading to the $100k bonding curve. Features:
+
+- 6 distinct market phases (accumulation → consolidation → pullback → recovery → breakout → final push)
+- Zone-aware mean reversion ($40k target with $60k breakout threshold)
+- True stochastic process without artificial directional biases
+- Momentum persistence and cyclical market behavior
 
 ## 🧮 Stochastic Process Details
 
