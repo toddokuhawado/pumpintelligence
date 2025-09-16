@@ -106,7 +106,7 @@ function setupEventListeners() {
 function generateNewChart() {
   const options = {
     chartType: document.getElementById("chartType").value,
-    scenario: document.getElementById("scenario").value,
+    scenario: "organic", // Always organic for pre-bonding
     volatility: document.getElementById("volatility").value,
   };
 
@@ -163,7 +163,7 @@ function updateInfo(chartData) {
   const { metadata, scenario, id } = chartData;
 
   document.getElementById("chartId").textContent = id.substr(0, 16) + "...";
-  document.getElementById("scenarioInfo").textContent = scenario;
+  document.getElementById("scenarioInfo").textContent = "Pre-Bonding";
 
   // Format market cap values
   const formatMcap = (value) => {

@@ -14,6 +14,7 @@ Advanced stochastic crypto chart generation for research and simulation purposes
 ## 🔬 Mathematical Foundation
 
 ### Core Algorithm
+
 - **Geometric Brownian Motion (GBM)** with stochastic volatility
 - **Momentum persistence** for trend continuation
 - **Cyclical market behavior** for bull/bear cycles
@@ -21,6 +22,7 @@ Advanced stochastic crypto chart generation for research and simulation purposes
 - **Zone-aware mean reversion** for natural price discovery
 
 ### Key Components
+
 ```
 dS = μS dt + σS dW  (GBM foundation)
 + Momentum persistence (recent trends continue)
@@ -32,6 +34,7 @@ dS = μS dt + σS dW  (GBM foundation)
 ## 🚀 Usage
 
 ### Local Development
+
 ```bash
 # Install dependencies
 npm install
@@ -43,6 +46,7 @@ python3 -m http.server 8000
 ```
 
 ### Chart Generation
+
 1. Open `http://localhost:8000`
 2. Select chart type (Pre-bonding recommended)
 3. Choose volatility level
@@ -58,6 +62,7 @@ python3 -m http.server 8000
 ## 🧮 Stochastic Process Details
 
 ### Market Phases (6 distinct phases)
+
 - **Early Accumulation**: Low volatility, gradual buildup
 - **Consolidation**: Very low volatility, sideways movement
 - **Pullback**: High volatility, downward pressure
@@ -66,12 +71,14 @@ python3 -m http.server 8000
 - **Final Push**: Controlled volatility, approach to targets
 
 ### Volatility Levels
+
 - **Low**: 8% per candle
 - **Medium**: 15% per candle
 - **High**: 25% per candle
 - **Extreme**: 35% per candle
 
 ### Mean Reversion
+
 - **Zone Target**: 40% of bonding curve ($40k)
 - **Breakout Threshold**: 50% above zone (breaks free at $60k)
 - **Strength**: 0.8% pull toward zone when contained
@@ -94,6 +101,7 @@ python3 -m http.server 8000
 ## 📈 Mathematical Accuracy
 
 This generator produces statistically realistic crypto price movements by combining:
+
 - Proper stochastic calculus (GBM)
 - Market microstructure (volatility clustering)
 - Behavioral finance (momentum, mean reversion)
@@ -112,4 +120,4 @@ MIT License - Free for research and educational use.
 
 ---
 
-*Generated with advanced stochastic modeling and financial mathematics*
+_Generated with advanced stochastic modeling and financial mathematics_
