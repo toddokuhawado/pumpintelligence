@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Chart Simulator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #1e222d;
+        color: #d1d4dc;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        color: #00ff88;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .controls {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      label {
+        font-size: 11px;
+        color: #787b86;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      select,
+      button {
+        padding: 10px 20px;
+        background: #2a2e39;
+        color: #d1d4dc;
+        border: 1px solid #363a45;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      select:hover,
+      button:hover {
+        background: #363a45;
+        border-color: #4a4e5a;
+      }
+
+      button.primary {
+        background: #00ff88;
+        color: #1e222d;
+        font-weight: 600;
+        border-color: #00ff88;
+      }
+
+      button.primary:hover {
+        background: #00cc70;
+        border-color: #00cc70;
+      }
+
+      #chart {
+        height: 600px;
+        background: #131722;
+        border: 1px solid #2a2e39;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+
+      .info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 20px;
+        background: #1e222d;
+        border: 1px solid #2a2e39;
+        border-radius: 4px;
+      }
+
+      .info-item {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .info-label {
+        color: #787b86;
+        font-size: 13px;
+      }
+
+      .info-value {
+        color: #d1d4dc;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Trading Chart Simulator</h1>
+        <p style="color: #787b86">
+          Generate realistic OHLC trading data for testing
+        </p>
+      </header>
+
+      <div class="controls">
+        <div class="control-group">
+          <label>Chart Type</label>
+          <select id="chartType">
+            <option value="full">Full (Pre + Post)</option>
+            <option value="pre">Pre-Bonding Only</option>
+            <option value="post">Post-Bonding Only</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Scenario</label>
+          <select id="scenario">
+            <option value="random">Random</option>
+            <option value="organic">Organic Growth</option>
+            <option value="pump_dump">Pump & Dump</option>
+            <option value="instant_rug">Instant Rug</option>
+            <option value="slow_bleed">Slow Bleed</option>
+            <option value="consolidation">Consolidation</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Volatility</label>
+          <select id="volatility">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="extreme">Extreme</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>&nbsp;</label>
+          <button id="generateBtn" class="primary">Generate Chart</button>
+        </div>
+
+        <div class="control-group">
+          <label>&nbsp;</label>
+          <button id="exportBtn">Export JSON</button>
+        </div>
+
+        <div class="control-group">
+          <label>&nbsp;</label>
+          <button id="exportImageBtn">Export Image</button>
+        </div>
+      </div>
+
+      <div id="chart"></div>
+
+      <div class="info">
+        <div class="info-item">
+          <span class="info-label">Chart ID:</span>
+          <span class="info-value" id="chartId">-</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Scenario:</span>
+          <span class="info-value" id="scenarioInfo">-</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Start MCap:</span>
+          <span class="info-value" id="startMcap">-</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Peak MCap:</span>
+          <span class="info-value" id="peakMcap">-</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Final MCap:</span>
+          <span class="info-value" id="finalMcap">-</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Total Candles:</span>
+          <span class="info-value" id="totalCandles">-</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="https://unpkg.com/simple-statistics@7.8.8/dist/simple-statistics.min.js"></script>
+    <script src="https://unpkg.com/seedrandom@3.0.5/seedrandom.min.js"></script>
+    <script src="https://unpkg.com/@faker-js/faker@10.0.0/dist/faker.min.js"></script>
+    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- Lightweight Charts -->
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+
+    <!-- Our scripts -->
+    <script src="generator.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
