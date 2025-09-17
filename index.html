@@ -116,6 +116,179 @@
         color: #d1d4dc;
         font-weight: 600;
       }
+
+      /* Analysis Sidebar Styles */
+      .analysis-sidebar {
+        background: #1e222d;
+        border: 1px solid #2a2e39;
+        border-radius: 4px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+
+      .analysis-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #2a2e39;
+      }
+
+      .analysis-title {
+        color: #00ff88;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .confidence-badge {
+        background: linear-gradient(45deg, #00ff88, #00cc70);
+        color: #1e222d;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      .analysis-section {
+        margin-bottom: 20px;
+      }
+
+      .analysis-section h4 {
+        color: #d1d4dc;
+        font-size: 14px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .pattern-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+      }
+
+      .pattern-item {
+        background: #2a2e39;
+        border: 1px solid #363a45;
+        border-radius: 4px;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .pattern-name {
+        color: #d1d4dc;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .pattern-confidence {
+        color: #787b86;
+        font-size: 12px;
+      }
+
+      .pattern-signal {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .pattern-signal.bullish {
+        background: #00ff88;
+        color: #1e222d;
+      }
+
+      .pattern-signal.bearish {
+        background: #ff4444;
+        color: #ffffff;
+      }
+
+      .pattern-signal.neutral {
+        background: #ffaa00;
+        color: #1e222d;
+      }
+
+      .recommendation-card {
+        background: #2a2e39;
+        border: 1px solid #363a45;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 12px 0;
+      }
+
+      .recommendation-card.buy-signal {
+        border-left: 4px solid #00ff88;
+      }
+
+      .recommendation-card.sell-signal {
+        border-left: 4px solid #ff4444;
+      }
+
+      .recommendation-card.wait-signal {
+        border-left: 4px solid #ffaa00;
+      }
+
+      .recommendation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .recommendation-type {
+        font-size: 16px;
+        font-weight: 600;
+        color: #d1d4dc;
+      }
+
+      .recommendation-confidence {
+        background: #363a45;
+        color: #d1d4dc;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+
+      .recommendation-reason {
+        color: #787b86;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+
+      .recommendation-details {
+        color: #d1d4dc;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .loading {
+        text-align: center;
+        color: #787b86;
+        font-style: italic;
+        padding: 20px;
+      }
+
+      .error {
+        background: #2a1a1a;
+        border: 1px solid #ff4444;
+        color: #ff6666;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+
+      .success {
+        background: #1a2a1a;
+        border: 1px solid #00ff88;
+        color: #88ff88;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
     </style>
   </head>
   <body>
@@ -160,6 +333,11 @@
           <label>&nbsp;</label>
           <button id="exportImageBtn">Export Image</button>
         </div>
+
+        <div class="control-group">
+          <label>&nbsp;</label>
+          <button id="analyzeBtn">Analyze with Claude</button>
+        </div>
       </div>
 
       <div id="chart"></div>
@@ -182,12 +360,85 @@
           <span class="info-value" id="peakMcap">-</span>
         </div>
         <div class="info-item">
-          <span class="info-label">Final MCap:</span>
+          <span class="info-label">Current MCap:</span>
           <span class="info-value" id="finalMcap">-</span>
         </div>
         <div class="info-item">
           <span class="info-label">Total Candles:</span>
           <span class="info-value" id="totalCandles">-</span>
+        </div>
+      </div>
+
+      <!-- AI Analysis Sidebar -->
+      <div id="analysisSidebar" class="analysis-sidebar" style="display: none;">
+        <div class="analysis-header">
+          <h3 class="analysis-title">AI Chart Analysis</h3>
+          <div class="confidence-badge" id="overallConfidence">-</div>
+        </div>
+        
+        <div class="analysis-section">
+          <h4>Pattern Detection</h4>
+          <div id="patternResults" class="pattern-grid">
+            <!-- Dynamic pattern results will be inserted here -->
+          </div>
+        </div>
+        
+        <div class="analysis-section">
+          <h4>Buyback Recommendation</h4>
+          <div id="buybackRecommendation" class="recommendation-card">
+            <!-- AI recommendation will be inserted here -->
+          </div>
+        </div>
+        
+        <div class="analysis-section">
+          <h4>Analysis Details</h4>
+          <div id="analysisDetails">
+            <!-- Detailed analysis will be inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Claude Analysis Section -->
+      <div id="analysisSection" style="display: none; margin-top: 20px;">
+        <div style="background: #1e222d; border: 1px solid #2a2e39; border-radius: 4px; padding: 20px;">
+          <h3 style="color: #00ff88; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <span>🤖</span> Claude Analysis
+            <span id="analysisStatus" style="font-size: 12px; color: #787b86;"></span>
+          </h3>
+          
+          <div id="analysisContent">
+            <div id="analysisLoading" style="display: none; text-align: center; padding: 20px;">
+              <div style="color: #787b86;">Analyzing chart with Claude Code...</div>
+              <div style="font-size: 12px; color: #555; margin-top: 5px;">This may take 30-60 seconds</div>
+            </div>
+            
+            <div id="analysisResults" style="display: none;">
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #00ff88;">Summary:</strong>
+                <div id="analysisSummary" style="margin-top: 5px; line-height: 1.5;"></div>
+              </div>
+              
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #00ff88;">Market Phases:</strong>
+                <div id="analysisPhases" style="margin-top: 5px; line-height: 1.5;"></div>
+              </div>
+              
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #00ff88;">Technical Patterns:</strong>
+                <div id="analysisPatterns" style="margin-top: 5px; line-height: 1.5;"></div>
+              </div>
+              
+              <div>
+                <strong style="color: #00ff88;">Key Levels:</strong>
+                <div id="analysisLevels" style="margin-top: 5px; line-height: 1.5;"></div>
+              </div>
+            </div>
+            
+            <div id="analysisError" style="display: none; color: #ff6b6b; padding: 15px; background: rgba(255, 107, 107, 0.1); border-radius: 4px;">
+              <strong>Analysis Failed:</strong>
+              <div id="analysisErrorMessage" style="margin-top: 5px;"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

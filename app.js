@@ -101,6 +101,9 @@ function setupEventListeners() {
   document
     .getElementById("exportImageBtn")
     .addEventListener("click", exportImage);
+  document
+    .getElementById("analyzeBtn")
+    .addEventListener("click", analyzeChart);
 }
 
 function generateNewChart() {
@@ -232,4 +235,185 @@ function exportImage() {
       console.error("Error generating chart image:", error);
       alert("Error generating chart image. Please try again.");
     });
+}
+
+async function analyzeChart() {
+  if (!currentData) {
+    alert("Please generate a chart first before analyzing.");
+    return;
+  }
+
+  const analyzeBtn = document.getElementById("analyzeBtn");
+  const analysisSidebar = document.getElementById("analysisSidebar");
+  
+  // Show loading state
+  analyzeBtn.textContent = "Analyzing...";
+  analyzeBtn.disabled = true;
+  
+  // Show analysis sidebar
+  analysisSidebar.style.display = "block";
+  
+  // Show loading in analysis sidebar
+  document.getElementById("patternResults").innerHTML = '<div class="loading">Analyzing chart patterns...</div>';
+  document.getElementById("buybackRecommendation").innerHTML = '<div class="loading">Generating buyback recommendation...</div>';
+  document.getElementById("analysisDetails").innerHTML = '<div class="loading">Processing analysis details...</div>';
+
+  try {
+    // Capture chart as image
+    const chartContainer = document.getElementById("chart");
+    const canvas = await html2canvas(chartContainer, {
+      backgroundColor: "#131722",
+      scale: 2, // Higher resolution for better analysis
+      useCORS: true,
+      allowTaint: false,
+    });
+
+    // Convert canvas to blob
+    const blob = await new Promise(resolve => {
+      canvas.toBlob(resolve, "image/png");
+    });
+
+    // Debug: Log canvas info
+    console.log('Chart captured:', {
+      width: canvas.width,
+      height: canvas.height,
+      blobSize: blob.size
+    });
+
+    // Create form data for upload
+    const formData = new FormData();
+    formData.append("chart", blob, "chart.png");
+    formData.append("chartId", currentData.id);
+    formData.append("metadata", JSON.stringify({
+      startMcap: currentData.metadata.startMcap,
+      finalMcap: currentData.metadata.finalMcap,
+      peakMcap: currentData.metadata.peakMcap,
+      totalCandles: currentData.metadata.totalCandles
+    }));
+
+    // Send to analysis API
+    const response = await fetch("/api/analyze-chart", {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      displayAnalysisResults(result.analysis);
+    } else {
+      throw new Error(result.error || "Analysis failed");
+    }
+
+  } catch (error) {
+    console.error("Chart analysis error:", error);
+    
+    // Show error in analysis sidebar
+    document.getElementById("patternResults").innerHTML = `<div class="error">Analysis failed: ${error.message}</div>`;
+    document.getElementById("buybackRecommendation").innerHTML = `<div class="error">Unable to generate recommendation</div>`;
+    document.getElementById("analysisDetails").innerHTML = `<div class="error">Error details: ${error.message}</div>`;
+  } finally {
+    // Reset button state
+    analyzeBtn.textContent = "Analyze with Claude";
+    analyzeBtn.disabled = false;
+  }
+}
+
+function displayAnalysisResults(analysis) {
+  // Display overall confidence
+  const confidence = calculateOverallConfidence(analysis);
+  document.getElementById("overallConfidence").textContent = `${confidence}%`;
+
+  // Display pattern results
+  displayPatternResults(analysis.patterns || []);
+
+  // Display buyback recommendation
+  displayBuybackRecommendation(analysis);
+
+  // Display analysis details
+  displayAnalysisDetails(analysis);
+}
+
+function calculateOverallConfidence(analysis) {
+  // Simple confidence calculation based on pattern strength
+  const patterns = analysis.patterns || [];
+  if (patterns.length === 0) return 50;
+  
+  const avgConfidence = patterns.reduce((sum, pattern) => {
+    return sum + (pattern.confidence || 5);
+  }, 0) / patterns.length;
+  
+  return Math.round(avgConfidence * 10);
+}
+
+function displayPatternResults(patterns) {
+  const container = document.getElementById("patternResults");
+  
+  if (patterns.length === 0) {
+    container.innerHTML = '<div class="loading">No patterns detected</div>';
+    return;
+  }
+
+  const patternHTML = patterns.map(pattern => `
+    <div class="pattern-item">
+      <span class="pattern-name">${pattern.name || 'Unknown Pattern'}</span>
+      <span class="pattern-confidence">${pattern.confidence || 5}/10</span>
+      <span class="pattern-signal ${pattern.signal || 'neutral'}">${pattern.signal || 'NEUTRAL'}</span>
+    </div>
+  `).join('');
+
+  container.innerHTML = patternHTML;
+}
+
+function displayBuybackRecommendation(analysis) {
+  const container = document.getElementById("buybackRecommendation");
+  
+  // Use the analysis data directly
+  const recommendation = analysis.buybackRecommendation || "WAIT";
+  const confidence = analysis.confidence || 50;
+  const reasoning = analysis.reasoning || "No reasoning provided";
+  
+  let signalClass = "wait-signal";
+  if (recommendation === "BUY NOW") {
+    signalClass = "buy-signal";
+  } else if (recommendation === "AVOID") {
+    signalClass = "sell-signal";
+  }
+
+  const recommendationHTML = `
+    <div class="recommendation-header">
+      <span class="recommendation-type">${recommendation}</span>
+      <span class="recommendation-confidence">${confidence}%</span>
+    </div>
+    <div class="recommendation-reason">${reasoning}</div>
+    <div class="recommendation-details">
+      <div>Support Level: ${analysis.currentSupport || "Not identified"}</div>
+      <div>Resistance Level: ${analysis.currentResistance || "Not identified"}</div>
+      <div>Market State: ${analysis.marketState || "Unknown"}</div>
+    </div>
+  `;
+
+  container.innerHTML = recommendationHTML;
+  container.className = `recommendation-card ${signalClass}`;
+}
+
+function displayAnalysisDetails(analysis) {
+  const container = document.getElementById("analysisDetails");
+  
+  const detailsHTML = `
+    <div style="color: #d1d4dc; font-size: 13px; line-height: 1.6;">
+      <div><strong>Analysis Summary:</strong></div>
+      <div style="margin: 8px 0; color: #787b86;">${analysis.summary || 'No summary available'}</div>
+      
+      <div style="margin-top: 15px;"><strong>Current Market State:</strong></div>
+      <div style="margin: 8px 0; color: #787b86;">${analysis.marketState || 'Unknown'}</div>
+      
+      <div style="margin-top: 15px;"><strong>Raw Analysis:</strong></div>
+      <div style="margin: 8px 0; color: #787b86; font-size: 11px; max-height: 100px; overflow-y: auto;">
+        ${(analysis.raw || '').substring(0, 500)}...
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = detailsHTML;
 }

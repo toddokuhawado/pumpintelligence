@@ -118,3 +118,12 @@ logs
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Claude Code session keys (SECURITY CRITICAL)
+claude-session.key
+*.key
+CLAUDE_SESSION_KEY*
+
+# Claude analysis output
+public/claude/
+exports/
