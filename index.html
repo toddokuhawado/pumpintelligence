@@ -24,6 +24,374 @@
         padding: 20px;
       }
 
+      .layout-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(320px, 460px);
+        gap: 24px;
+        align-items: stretch;
+      }
+
+      @media (max-width: 1400px) {
+        .layout-grid {
+          grid-template-columns: minmax(0, 2.5fr) minmax(320px, 420px);
+        }
+      }
+
+      @media (max-width: 1180px) {
+        .layout-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .primary-pane {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .token-meta-panel {
+        display: none;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 20px;
+        background: #1e222d;
+        border: 1px solid #2a2e39;
+        border-radius: 6px;
+      }
+
+      .token-meta-panel.visible {
+        display: flex;
+      }
+
+      .token-meta-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 6px;
+        object-fit: cover;
+        background: #121520;
+        border: 1px solid #2a2e39;
+      }
+
+      .token-meta-details {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .token-meta-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #d1d4dc;
+      }
+
+      .token-meta-links {
+        display: flex;
+        gap: 12px;
+        font-size: 12px;
+      }
+
+      .token-meta-links a {
+        color: #00ff88;
+        text-decoration: none;
+      }
+
+      .token-meta-links a:hover {
+        text-decoration: underline;
+      }
+
+      .terminal-pane {
+        background: #161922;
+        border: 1px solid #2a2e39;
+        border-radius: 6px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-height: 300px;
+        height: 100%;
+        max-height: 640px;
+      }
+
+      .terminal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .terminal-title {
+        font-size: 18px;
+        color: #00ff88;
+        font-weight: 600;
+      }
+
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-badge.connected {
+        background: rgba(0, 255, 136, 0.15);
+        color: #00ff88;
+        border: 1px solid rgba(0, 255, 136, 0.3);
+      }
+
+      .status-badge.connecting {
+        background: rgba(255, 170, 0, 0.15);
+        color: #ffaa00;
+        border: 1px solid rgba(255, 170, 0, 0.3);
+      }
+
+      .status-badge.error,
+      .status-badge.disconnected {
+        background: rgba(255, 68, 68, 0.15);
+        color: #ff6666;
+        border: 1px solid rgba(255, 68, 68, 0.3);
+      }
+
+      .terminal-controls {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        font-size: 13px;
+        color: #787b86;
+        justify-content: space-between;
+      }
+
+      .terminal-controls .terminal-spacer {
+        flex: 1;
+      }
+
+      .terminal-controls label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+
+      .terminal-controls input[type="checkbox"] {
+        accent-color: #00ff88;
+      }
+
+      .terminal-table {
+        background: #1e222d;
+        border: 1px solid #2a2e39;
+        border-radius: 4px;
+        overflow: hidden;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .terminal-table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .terminal-table thead {
+        background: #121520;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #787b86;
+        font-size: 11px;
+      }
+
+      .terminal-table th,
+      .terminal-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #2a2e39;
+        white-space: nowrap;
+      }
+
+      .terminal-table td:first-child {
+        width: 44%;
+      }
+
+      .terminal-table td {
+        max-width: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      .terminal-table tbody tr:nth-child(even) {
+        background: rgba(42, 46, 57, 0.35);
+      }
+
+      .terminal-table tbody tr:hover {
+        background: rgba(0, 255, 136, 0.08);
+      }
+
+      .terminal-table tbody tr.token-row-new {
+        background: rgba(0, 255, 136, 0.05);
+      }
+
+      .terminal-table tbody tr.token-row-out {
+        opacity: 0.55;
+      }
+
+      .terminal-table tbody tr.token-row-selected {
+        outline: 1px solid rgba(0, 255, 136, 0.4);
+        background: rgba(0, 255, 136, 0.08);
+      }
+
+      .token-symbol {
+        font-weight: 600;
+        color: #d1d4dc;
+      }
+
+      .token-marketcap {
+        color: #00ff88;
+      }
+
+      .token-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        margin-top: 4px;
+      }
+
+      .token-tag.in-range {
+        background: rgba(0, 255, 136, 0.12);
+        color: #00ff88;
+        border: 1px solid rgba(0, 255, 136, 0.35);
+      }
+
+      .token-tag.new {
+        background: rgba(255, 170, 0, 0.12);
+        color: #ffaa00;
+        border: 1px solid rgba(255, 170, 0, 0.35);
+      }
+
+      .token-tag.watch {
+        background: rgba(144, 153, 175, 0.14);
+        color: #9ea3b4;
+        border: 1px solid rgba(144, 153, 175, 0.25);
+      }
+
+      .pump-trades-panel {
+        display: none;
+        padding: 16px 20px;
+        background: #1e222d;
+        border: 1px solid #2a2e39;
+        border-radius: 6px;
+      }
+
+      .pump-trades-panel.visible {
+        display: block;
+      }
+
+      .pump-trades-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .pump-trades-header h3 {
+        font-size: 16px;
+        color: #d1d4dc;
+      }
+
+      .pump-trades-table {
+        max-height: 220px;
+        overflow-y: auto;
+        border: 1px solid #2a2e39;
+        border-radius: 4px;
+      }
+
+      .pump-trades-table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      .pump-trades-table th,
+      .pump-trades-table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #2a2e39;
+        white-space: nowrap;
+      }
+
+      .pump-trades-table tbody tr:nth-child(even) {
+        background: rgba(42, 46, 57, 0.35);
+      }
+
+      .pump-trades-table tbody tr.buy {
+        color: #00ff88;
+      }
+
+      .pump-trades-table tbody tr.sell {
+        color: #ff6666;
+      }
+
+      .token-change.positive {
+        color: #00ff88;
+      }
+
+      .token-change.negative {
+        color: #ff6666;
+      }
+
+      .empty-state {
+        padding: 16px;
+        text-align: center;
+        color: #787b86;
+        font-style: italic;
+      }
+
+      .terminal-log {
+        background: #1e222d;
+        border: 1px solid #2a2e39;
+        border-radius: 4px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .terminal-log h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #787b86;
+      }
+
+      .log-stream {
+        max-height: 200px;
+        overflow-y: auto;
+        font-family: "Menlo", "Fira Code", monospace;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #9ea3b4;
+      }
+
+      .log-line {
+        padding: 4px 0;
+      }
+
+      .log-line .timestamp {
+        color: #5c5f6d;
+        margin-right: 8px;
+      }
+
+      .log-line .event-type {
+        color: #ffaa00;
+        margin-right: 6px;
+      }
+
+      .log-line.important .event-type {
+        color: #00ff88;
+      }
+
       header {
         margin-bottom: 30px;
       }
@@ -340,106 +708,179 @@
         </div>
       </div>
 
-      <div id="chart"></div>
+      <div class="layout-grid">
+        <div class="primary-pane">
+          <div id="chart"></div>
 
-      <div class="info">
-        <div class="info-item">
-          <span class="info-label">Chart ID:</span>
-          <span class="info-value" id="chartId">-</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Type:</span>
-          <span class="info-value" id="scenarioInfo">-</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Start MCap:</span>
-          <span class="info-value" id="startMcap">-</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Peak MCap:</span>
-          <span class="info-value" id="peakMcap">-</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Current MCap:</span>
-          <span class="info-value" id="finalMcap">-</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Total Candles:</span>
-          <span class="info-value" id="totalCandles">-</span>
-        </div>
-      </div>
+          <div id="tokenMetaPanel" class="token-meta-panel">
+            <img id="tokenMetaAvatar" class="token-meta-avatar" alt="token avatar" />
+            <div class="token-meta-details">
+              <div id="tokenMetaTitle" class="token-meta-title">Live Token</div>
+              <div class="token-meta-links">
+                <a id="tokenMetaMintLink" href="#" target="_blank" rel="noopener noreferrer">View on PumpFun</a>
+                <a id="tokenMetaUriLink" href="#" target="_blank" rel="noopener noreferrer">Metadata</a>
+              </div>
+            </div>
+          </div>
 
-      <!-- AI Analysis Sidebar -->
-      <div id="analysisSidebar" class="analysis-sidebar" style="display: none;">
-        <div class="analysis-header">
-          <h3 class="analysis-title">AI Chart Analysis</h3>
-          <div class="confidence-badge" id="overallConfidence">-</div>
-        </div>
-        
-        <div class="analysis-section">
-          <h4>Pattern Detection</h4>
-          <div id="patternResults" class="pattern-grid">
-            <!-- Dynamic pattern results will be inserted here -->
+          <div class="info">
+            <div class="info-item">
+              <span class="info-label">Chart ID:</span>
+              <span class="info-value" id="chartId">-</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Type:</span>
+              <span class="info-value" id="scenarioInfo">-</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Start MCap:</span>
+              <span class="info-value" id="startMcap">-</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Peak MCap:</span>
+              <span class="info-value" id="peakMcap">-</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Current MCap:</span>
+              <span class="info-value" id="finalMcap">-</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Candles:</span>
+              <span class="info-value" id="totalCandles">-</span>
+            </div>
           </div>
-        </div>
-        
-        <div class="analysis-section">
-          <h4>Buyback Recommendation</h4>
-          <div id="buybackRecommendation" class="recommendation-card">
-            <!-- AI recommendation will be inserted here -->
-          </div>
-        </div>
-        
-        <div class="analysis-section">
-          <h4>Analysis Details</h4>
-          <div id="analysisDetails">
-            <!-- Detailed analysis will be inserted here -->
-          </div>
-        </div>
-      </div>
 
-      <!-- Claude Analysis Section -->
-      <div id="analysisSection" style="display: none; margin-top: 20px;">
-        <div style="background: #1e222d; border: 1px solid #2a2e39; border-radius: 4px; padding: 20px;">
-          <h3 style="color: #00ff88; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-            <span>🤖</span> Claude Analysis
-            <span id="analysisStatus" style="font-size: 12px; color: #787b86;"></span>
-          </h3>
-          
-          <div id="analysisContent">
-            <div id="analysisLoading" style="display: none; text-align: center; padding: 20px;">
-              <div style="color: #787b86;">Analyzing chart with Claude Code...</div>
-              <div style="font-size: 12px; color: #555; margin-top: 5px;">This may take 30-60 seconds</div>
+          <!-- AI Analysis Sidebar -->
+          <div id="analysisSidebar" class="analysis-sidebar" style="display: none;">
+            <div class="analysis-header">
+              <h3 class="analysis-title">AI Chart Analysis</h3>
+              <div class="confidence-badge" id="overallConfidence">-</div>
             </div>
             
-            <div id="analysisResults" style="display: none;">
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #00ff88;">Summary:</strong>
-                <div id="analysisSummary" style="margin-top: 5px; line-height: 1.5;"></div>
-              </div>
-              
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #00ff88;">Market Phases:</strong>
-                <div id="analysisPhases" style="margin-top: 5px; line-height: 1.5;"></div>
-              </div>
-              
-              <div style="margin-bottom: 15px;">
-                <strong style="color: #00ff88;">Technical Patterns:</strong>
-                <div id="analysisPatterns" style="margin-top: 5px; line-height: 1.5;"></div>
-              </div>
-              
-              <div>
-                <strong style="color: #00ff88;">Key Levels:</strong>
-                <div id="analysisLevels" style="margin-top: 5px; line-height: 1.5;"></div>
+            <div class="analysis-section">
+              <h4>Pattern Detection</h4>
+              <div id="patternResults" class="pattern-grid">
+                <!-- Dynamic pattern results will be inserted here -->
               </div>
             </div>
             
-            <div id="analysisError" style="display: none; color: #ff6b6b; padding: 15px; background: rgba(255, 107, 107, 0.1); border-radius: 4px;">
-              <strong>Analysis Failed:</strong>
-              <div id="analysisErrorMessage" style="margin-top: 5px;"></div>
+            <div class="analysis-section">
+              <h4>Buyback Recommendation</h4>
+              <div id="buybackRecommendation" class="recommendation-card">
+                <!-- AI recommendation will be inserted here -->
+              </div>
+            </div>
+            
+            <div class="analysis-section">
+              <h4>Analysis Details</h4>
+              <div id="analysisDetails">
+                <!-- Detailed analysis will be inserted here -->
+              </div>
+            </div>
+          </div>
+
+          <div id="pumpTradesPanel" class="pump-trades-panel">
+            <div class="pump-trades-header">
+              <h3>Recent Trades</h3>
+            </div>
+            <div class="pump-trades-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>SOL</th>
+                    <th>Tokens</th>
+                    <th>Market Cap</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="pumpTradesTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Claude Analysis Section -->
+          <div id="analysisSection" style="display: none; margin-top: 20px;">
+            <div style="background: #1e222d; border: 1px solid #2a2e39; border-radius: 4px; padding: 20px;">
+              <h3 style="color: #00ff88; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <span>🤖</span> Claude Analysis
+                <span id="analysisStatus" style="font-size: 12px; color: #787b86;"></span>
+              </h3>
+              
+              <div id="analysisContent">
+                <div id="analysisLoading" style="display: none; text-align: center; padding: 20px;">
+                  <div style="color: #787b86;">Analyzing chart with Claude Code...</div>
+                  <div style="font-size: 12px; color: #555; margin-top: 5px;">This may take 30-60 seconds</div>
+                </div>
+                
+                <div id="analysisResults" style="display: none;">
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #00ff88;">Summary:</strong>
+                    <div id="analysisSummary" style="margin-top: 5px; line-height: 1.5;"></div>
+                  </div>
+                  
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #00ff88;">Market Phases:</strong>
+                    <div id="analysisPhases" style="margin-top: 5px; line-height: 1.5;"></div>
+                  </div>
+                  
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #00ff88;">Technical Patterns:</strong>
+                    <div id="analysisPatterns" style="margin-top: 5px; line-height: 1.5;"></div>
+                  </div>
+                  
+                  <div>
+                    <strong style="color: #00ff88;">Key Levels:</strong>
+                    <div id="analysisLevels" style="margin-top: 5px; line-height: 1.5;"></div>
+                  </div>
+                </div>
+                
+                <div id="analysisError" style="display: none; color: #ff6b6b; padding: 15px; background: rgba(255, 107, 107, 0.1); border-radius: 4px;">
+                  <strong>Analysis Failed:</strong>
+                  <div id="analysisErrorMessage" style="margin-top: 5px;"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        <aside class="terminal-pane">
+          <div class="terminal-header">
+            <div class="terminal-title">Pump Portal Live Feed</div>
+            <span id="pumpStatusBadge" class="status-badge disconnected">Offline</span>
+          </div>
+
+          <div class="terminal-controls">
+            <label>
+              <input type="checkbox" id="pumpMockToggle" />
+              Use Mock Sandbox Feed
+            </label>
+            <button id="pumpReconnectBtn">Reconnect</button>
+            <button id="pumpClearLogBtn">Clear Log</button>
+          </div>
+
+          <div class="terminal-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Market Cap</th>
+                  <th>Price</th>
+                  <th>Change</th>
+                  <th>Age</th>
+                </tr>
+              </thead>
+              <tbody id="pumpTokenTable"></tbody>
+            </table>
+            <div id="pumpTokenEmpty" class="empty-state">Waiting for 15–30k market cap launches…</div>
+          </div>
+
+          <div class="terminal-log">
+            <h4>Event Log</h4>
+            <div id="pumpLog" class="log-stream"></div>
+          </div>
+        </aside>
       </div>
     </div>
 
@@ -454,6 +895,7 @@
 
     <!-- Our scripts -->
     <script src="generator.js"></script>
+    <script src="pump-portal-client.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
